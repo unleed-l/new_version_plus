@@ -32,7 +32,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // Instantiate NewVersion manager object (Using GCP Console app as example)
     final newVersion = NewVersionPlus(
-      iOSId: 'com.disney.disneyplus', androidId: 'com.whatsapp', androidPlayStoreCountry: "es_ES", androidHtmlReleaseNotes: true, //support country code
+      iOSId: 'com.disney.disneyplus',
+      androidId: 'com.whatsapp',
+      androidPlayStoreCountry: "es_ES",
+      androidHtmlReleaseNotes: true, //support country code
     );
 
     // You can let the plugin handle fetching the status and showing a dialog,
@@ -44,8 +47,8 @@ class _MyHomePageState extends State<MyHomePage> {
       releaseNotes: '',
       originalStoreVersion: '',
     );
-    print(ver);
-    const simpleBehavior = true;
+    debugPrint(ver.toString());
+    // const simpleBehavior = true;
 
     // if (simpleBehavior) {
     basicStatusCheck(newVersion);
@@ -61,15 +64,17 @@ class _MyHomePageState extends State<MyHomePage> {
       release = version.releaseNotes ?? "";
       setState(() {});
     }
-    newVersion.showAlertIfNecessary(
-      context: context,
-      launchModeVersion: LaunchModeVersion.external,
-    );
+    if (mounted) {
+      newVersion.showAlertIfNecessary(
+        context: context,
+        launchModeVersion: LaunchModeVersion.external,
+      );
+    }
   }
 
   advancedStatusCheck(NewVersionPlus newVersion) async {
     final status = await newVersion.getVersionStatus();
-    if (status != null) {
+    if (status != null && mounted) {
       debugPrint(status.releaseNotes);
       debugPrint(status.appStoreLink);
       debugPrint(status.localVersion);
